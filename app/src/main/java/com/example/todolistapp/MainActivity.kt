@@ -15,24 +15,25 @@ open class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        //val signInActivity = Intent(this, MainActivity::class.java)
-        //startActivityForResult(signInActivity, )
-
-        val db = Firebase.firestore
-        db.collection("Users")
-            .get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
-                    Log.d("TAG", "${document.id} => ${document.data}")
-                    userId = document.id;
-                    userData = document.data;
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.w("TAG", "Error getting documents.", exception)
-            }
+        startActivity(Intent(this, GoogleSignInActivity::class.java))
+//        setContentView(R.layout.activity_main)
+//
+//        //val signInActivity = Intent(this, MainActivity::class.java)
+//        //startActivityForResult(signInActivity, )
+//
+//        val db = Firebase.firestore
+//        db.collection("Users")
+//            .get()
+//            .addOnSuccessListener { result ->
+//                for (document in result) {
+//                    Log.d("TAG", "${document.id} => ${document.data}")
+//                    userId = document.id;
+//                    userData = document.data;
+//                }
+//            }
+//            .addOnFailureListener { exception ->
+//                Log.w("TAG", "Error getting documents.", exception)
+//            }
 
 
 
