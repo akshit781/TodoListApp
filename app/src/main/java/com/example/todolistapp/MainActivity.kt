@@ -28,19 +28,19 @@ open class MainActivity : AppCompatActivity() {
 //            startActivity(signInActivity)
 //        }
 
-        val db = Firebase.firestore
-        db.collection("Users")
-            .get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
-                    Log.d("TAG", "${document.id} => ${document.data}")
-                    userId = document.id;
-                    userData = document.data;
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.w("TAG", "Error getting documents.", exception)
-            }
+//        val db = Firebase.firestore
+//        db.collection("Users")
+//            .get()
+//            .addOnSuccessListener { result ->
+//                for (document in result) {
+//                    Log.d("TAG", "${document.id} => ${document.data}")
+//                    userId = document.id;
+//                    userData = document.data;
+//                }
+//            }
+//            .addOnFailureListener { exception ->
+//                Log.w("TAG", "Error getting documents.", exception)
+//            }
 
 
 

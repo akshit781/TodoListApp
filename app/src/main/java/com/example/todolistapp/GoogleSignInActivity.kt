@@ -14,6 +14,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.example.todolistapp.R
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_google.detail
 import kotlinx.android.synthetic.main.activity_google.disconnectButton
 import kotlinx.android.synthetic.main.activity_google.main_layout
@@ -42,7 +44,7 @@ class GoogleSignInActivity : MainActivity(), View.OnClickListener {
         signOutButton.setOnClickListener(this)
         disconnectButton.setOnClickListener(this)
 
-        // [START config_signin]
+        // [START config_signin]x
         // Configure Google Sign In
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -150,7 +152,21 @@ class GoogleSignInActivity : MainActivity(), View.OnClickListener {
         if (user != null) {
             status.text = getString(R.string.google_status_fmt, user.email)
             detail.text = getString(R.string.firebase_status_fmt, user.uid)
-
+            Log.d("TAG", user.uid)
+            val db = Firebase.firestore
+            db.collection("Users")
+                .document(user.uid)
+                .get()
+                .addOnSuccessListener { document ->
+                    if (document != null) {
+                        Log.d("TAG", "${document.id} => ${document.data}")
+                        userId = document.id;
+                        userData = document.data;
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.w("TAG", "Error getting documents.", exception)
+                }
             signInButton.visibility = View.GONE
             signOutAndDisconnect.visibility = View.VISIBLE
         } else {
