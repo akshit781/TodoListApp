@@ -10,7 +10,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".GoogleSignInActivity"
-            android:launchMode = "singleInstance">
+            android:launchMode = "singleInstance"
+            android:noHistory = "false">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,7 +21,8 @@
         <activity
             android:name=".MainActivity"
             android:label="Todo List"
-            android:launchMode = "singleInstance"/>
+            android:launchMode = "singleInstance"
+            android:noHistory = "false"/>
     </application>
 
 </manifest>
