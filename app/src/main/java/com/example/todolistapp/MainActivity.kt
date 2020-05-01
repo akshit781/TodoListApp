@@ -65,21 +65,14 @@ open class MainActivity : AppCompatActivity() {
                                 val toDoItem = document.data!!.get(key) as? HashMap<String, Any?>
                                 toDoList.add(ToDoItem(key, toDoItem))
                             }
+                            userData = document.data as Map<String, Any>
                             todoAdapter.notifyDataSetChanged()
+                        } else {
+                            val data = HashMap<String, HashMap<String, Any>>()
+                            db.collection("Users").document(userId).set(data, SetOptions.merge())
                         }
                         Log.d("TAG", "${document.id} => $toDoList")
-                        userId = document.id
-                        userData = document.data as Map<String, Any>
-                        db.collection("Users").document(userId)
-                            .set(
-                                ToDoItem(
-                                    "abcdefg",
-                                    "details",
-                                    false,
-                                    "location",
-                                    Timestamp(0, 0)
-                                ).getHashMapOf(), SetOptions.merge()
-                            )
+
                     }
                 }
                 .addOnFailureListener { exception ->
