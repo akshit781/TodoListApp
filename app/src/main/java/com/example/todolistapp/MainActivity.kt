@@ -13,6 +13,7 @@ import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -34,7 +35,7 @@ open class MainActivity : AppCompatActivity() {
     lateinit var etLocation: EditText
     lateinit var etTime: EditText
 
-    lateinit var userId : String
+    lateinit var userId: String
     lateinit var userData: Map<String, Any>
 
     lateinit var todoAdapter: TodoAdapter
@@ -64,21 +65,25 @@ open class MainActivity : AppCompatActivity() {
                                 val toDoItem = document.data!!.get(key) as? HashMap<String, Any?>
                                 toDoList.add(ToDoItem(key, toDoItem))
                             }
+                            todoAdapter.notifyDataSetChanged()
                         }
                         Log.d("TAG", "${document.id} => $toDoList")
                         userId = document.id
                         userData = document.data as Map<String, Any>
-                        val data = hashMapOf("capital" to hashMapOf(
-                            "asd" to true,
-                            "time" to Timestamp(Date(120, 4, 6))
-
-                        ))
-
-                        db.collection("Users").document("DJ")
-                            .set(data, SetOptions.merge())
+                        db.collection("Users").document(userId)
+                            .set(
+                                ToDoItem(
+                                    "abcdefg",
+                                    "details",
+                                    false,
+                                    "location",
+                                    Timestamp(0, 0)
+                                ).getHashMapOf(), SetOptions.merge()
+                            )
                     }
                 }
                 .addOnFailureListener { exception ->
+                    db.collection("Users").document(userId)
                     Log.w("TAG", "Error getting documents.", exception)
                 }
 
@@ -101,8 +106,13 @@ open class MainActivity : AppCompatActivity() {
             listView.adapter = todoAdapter
 
             bRefresh.setOnClickListener {
+                val docRef = db.collection("Users").document(userId)
                 for (i in todoAdapter.getList().size - 1 downTo 0) {
                     if (todoAdapter.getList()[i].isCompleted) {
+                        val updates = hashMapOf<String, Any>(
+                            todoAdapter.getList()[i].title to FieldValue.delete()
+                        )
+                        docRef.update(updates).addOnCompleteListener { }
                         todoAdapter.removeItem(i)
                     }
                 }
@@ -127,6 +137,14 @@ open class MainActivity : AppCompatActivity() {
                         date
                     )
                 )
+                db.collection("Users").document(userId)
+                    .set(ToDoItem(
+                        etTitle.text.toString(),
+                        etDescription.text.toString(),
+                        false,
+                        etLocation.text.toString(),
+                        date
+                    ).getHashMapOf(), SetOptions.merge())
                 todoAdapter.notifyDataSetChanged()
 
                 etTitle.text.clear()
@@ -148,7 +166,11 @@ open class MainActivity : AppCompatActivity() {
         }
     }
 
-    class TodoAdapter(context: Context, @LayoutRes private val layoutResource: Int, private val todoItems: ArrayList<ToDoItem>):
+    class TodoAdapter(
+        context: Context,
+        @LayoutRes private val layoutResource: Int,
+        private val todoItems: ArrayList<ToDoItem>
+    ) :
         ArrayAdapter<ToDoItem>(context, layoutResource, todoItems) {
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -167,7 +189,7 @@ open class MainActivity : AppCompatActivity() {
             return todoItems
         }
 
-        private fun createViewFromResource(position: Int, parent: ViewGroup?): View{
+        private fun createViewFromResource(position: Int, parent: ViewGroup?): View {
             val view: View = LayoutInflater.from(context).inflate(layoutResource, parent, false)
 
             view.setOnClickListener {
