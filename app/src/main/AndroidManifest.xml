@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"
+        <activity android:name=".GoogleSignInActivity"
             android:launchMode = "singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -18,7 +18,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".GoogleSignInActivity"
+            android:name=".MainActivity"
             android:label="@string/label_google_sign_in"
             android:launchMode = "singleInstance"/>
     </application>

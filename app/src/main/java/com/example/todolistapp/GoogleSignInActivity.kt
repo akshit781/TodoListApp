@@ -1,10 +1,12 @@
 package com.example.todolistapp
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -21,7 +23,9 @@ import kotlinx.android.synthetic.main.activity_google.*
 import java.util.*
 
 // Used https://github.com/firebase/quickstart-android/tree/master/auth as resource
-class GoogleSignInActivity : MainActivity(), View.OnClickListener {
+class GoogleSignInActivity : AppCompatActivity(), View.OnClickListener {
+
+    var id: String? = null
 
     // [START declare_auth]
     private lateinit var auth: FirebaseAuth
@@ -134,7 +138,14 @@ class GoogleSignInActivity : MainActivity(), View.OnClickListener {
     }
 
     private fun exitActivity() {
-        finish()
+//        var intent = Intent()
+//        intent.putExtra("id", id)
+//        setResult(Activity.RESULT_OK, intent)
+//        finish()
+
+        var intent = Intent(this, MainActivity::class.java)
+        intent.putExtra("id", id)
+        startActivity(intent)
     }
 
     private fun updateUI(user: FirebaseUser?) {
@@ -143,36 +154,9 @@ class GoogleSignInActivity : MainActivity(), View.OnClickListener {
             status.text = getString(R.string.google_status_fmt, user.email)
             detail.text = getString(R.string.firebase_status_fmt, user.uid)
             Log.d("TAG", user.uid)
-            val db = Firebase.firestore
-            db.collection("Users")
-                .document(user.uid)
-                .get()
-                .addOnSuccessListener { document ->
-                    if (document != null) {
-                        Log.d("TAG", "${document.id} => ${document.data}")
-                        val keys = document.data?.keys
-                        if (keys != null) {
-                            for (key in keys) {
-                                val toDoItem = document.data!!.get(key) as? HashMap<String, Any?>
-                                toDoList.add(ToDoItem(key, toDoItem))
-                            }
-                        }
-                        Log.d("TAG", "${document.id} => $toDoList")
-                        userId = document.id
-                        userData = document.data as Map<String, Any>
-                        val data = hashMapOf("capital" to hashMapOf(
-                            "asd" to true,
-                            "time" to Timestamp(Date(120, 4, 6))
 
-                        ))
+            id = user.uid;
 
-                        db.collection("Users").document("DJ")
-                            .set(data, SetOptions.merge())
-                    }
-                }
-                .addOnFailureListener { exception ->
-                    Log.w("TAG", "Error getting documents.", exception)
-                }
             signInButton.visibility = View.GONE
             signOutAndContinue.visibility = View.VISIBLE
         } else {
