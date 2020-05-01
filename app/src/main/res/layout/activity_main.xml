@@ -5,18 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
+    android:background="@color/colorBlack"
     tools:context=".MainActivity">
 
     <ListView
         android:id="@+id/id_listView"
-        android:layout_width="375dp"
-        android:layout_height="238dp"
+        android:layout_width="389dp"
+        android:layout_height="209dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.444"
+        app:layout_constraintHorizontal_bias="0.555"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.146" />
+        app:layout_constraintVertical_bias="0.158" />
 
     <Button
         android:id="@+id/id_bRefresh"
@@ -61,6 +62,8 @@
                 android:id="@+id/id_etTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/colorWhite"
+                android:textColorHint="@color/grey_500"
                 android:layout_weight="1"
                 android:ems="10"
                 android:gravity="center"
@@ -77,6 +80,8 @@
                 android:id="@+id/id_etDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/colorWhite"
+                android:textColorHint="@color/grey_500"
                 android:layout_weight="1"
                 android:ems="10"
                 android:gravity="center"
@@ -93,6 +98,8 @@
                 android:id="@+id/id_etLocation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/colorWhite"
+                android:textColorHint="@color/grey_500"
                 android:layout_weight="1"
                 android:ems="10"
                 android:gravity="center"
@@ -109,6 +116,8 @@
                 android:id="@+id/id_etTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/colorWhite"
+                android:textColorHint="@color/grey_500"
                 android:layout_weight="1"
                 android:ems="10"
                 android:gravity="center"

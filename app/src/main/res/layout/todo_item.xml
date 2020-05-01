@@ -4,34 +4,42 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/grey_300"
     tools:context=".MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.007"
+        app:layout_constraintVertical_bias="0.000"
         tools:layout_editor_absoluteX="0dp">
 
         <TextView
             android:id="@+id/id_tTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/colorBlack"
             android:layout_weight="1" />
 
         <TextView
             android:id="@+id/id_tTime"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/colorBlack"
             android:layout_weight="1" />
 
         <CheckBox
             android:id="@+id/id_checkBox"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5" />
+            android:gravity="center"
+            android:layoutDirection="rtl"
+            android:layout_weight="1" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

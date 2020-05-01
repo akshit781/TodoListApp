@@ -1,8 +1,6 @@
 package com.example.todolistapp
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,7 +10,6 @@ import android.widget.*
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
@@ -41,16 +38,11 @@ open class MainActivity : AppCompatActivity() {
     lateinit var todoAdapter: TodoAdapter
     var toDoList = ArrayList<ToDoItem>()
 
-    var called = false
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        if (!called) {
-            super.onCreate(savedInstanceState)
-            setContentView(R.layout.activity_main)
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
-//            val signInActivity = Intent(this, GoogleSignInActivity::class.java)
-//            startActivityForResult(signInActivity, 0)
-            userId = intent.getStringExtra("id")
+        userId = intent.getStringExtra("id")
 
             val db = Firebase.firestore
             db.collection("Users")
@@ -80,7 +72,7 @@ open class MainActivity : AppCompatActivity() {
                     Log.w("TAG", "Error getting documents.", exception)
                 }
 
-            Log.d("TAG", toDoList.toString())
+            Log.d("TAG List", toDoList.toString())
 
             listView = findViewById(R.id.id_listView)
             bRefresh = findViewById(R.id.id_bRefresh)
@@ -90,72 +82,56 @@ open class MainActivity : AppCompatActivity() {
             etLocation = findViewById(R.id.id_etLocation)
             etTime = findViewById(R.id.id_etTime)
 
-            var testList = ArrayList<ToDoItem>()
-            testList.add(ToDoItem("title", "details", false, "location", Timestamp(0, 0)))
-            testList.add(ToDoItem("title", "details", false, "location", Timestamp(0, 0)))
-            testList.add(ToDoItem("title", "details", false, "location", Timestamp(0, 0)))
+        todoAdapter = TodoAdapter(this, R.layout.todo_item, toDoList)
+        listView.adapter = todoAdapter
 
-            todoAdapter = TodoAdapter(this, R.layout.todo_item, toDoList)
-            listView.adapter = todoAdapter
-
-            bRefresh.setOnClickListener {
-                val docRef = db.collection("Users").document(userId)
-                for (i in todoAdapter.getList().size - 1 downTo 0) {
-                    if (todoAdapter.getList()[i].isCompleted) {
-                        val updates = hashMapOf<String, Any>(
-                            todoAdapter.getList()[i].title to FieldValue.delete()
-                        )
-                        docRef.update(updates).addOnCompleteListener { }
-                        todoAdapter.removeItem(i)
-                    }
-                }
-                todoAdapter.notifyDataSetChanged()
-            }
-
-            bAdd.setOnClickListener {
-                var date = Date()
-                try {
-                    val formatter: DateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
-                    date = formatter.parse(etTime.text.toString()) as Date
-                } catch (exception: Exception) {
-
-                }
-
-                todoAdapter.addItem(
-                    ToDoItem(
-                        etTitle.text.toString(),
-                        etDescription.text.toString(),
-                        false,
-                        etLocation.text.toString(),
-                        date
+        bRefresh.setOnClickListener {
+            val docRef = db.collection("Users").document(userId)
+            for (i in todoAdapter.getList().size - 1 downTo 0) {
+                if (todoAdapter.getList()[i].isCompleted) {
+                    val updates = hashMapOf<String, Any>(
+                        todoAdapter.getList()[i].title to FieldValue.delete()
                     )
-                )
-                db.collection("Users").document(userId)
-                    .set(ToDoItem(
-                        etTitle.text.toString(),
-                        etDescription.text.toString(),
-                        false,
-                        etLocation.text.toString(),
-                        date
-                    ).getHashMapOf(), SetOptions.merge())
-                todoAdapter.notifyDataSetChanged()
-
-                etTitle.text.clear()
-                etDescription.text.clear()
-                etLocation.text.clear()
-                etTime.text.clear()
+                    docRef.update(updates).addOnCompleteListener { }
+                    todoAdapter.removeItem(i)
+                }
             }
-            called = true
+            todoAdapter.notifyDataSetChanged()
         }
-    }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+        bAdd.setOnClickListener {
+            var date = Date()
+            try {
+                val formatter: DateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
+                date = formatter.parse(etTime.text.toString()) as Date
+            } catch (exception: Exception) {
 
-        if (resultCode == Activity.RESULT_OK) {
-            if (data != null) {
-                userId = data.getStringExtra("id")
             }
+
+            todoAdapter.addItem(
+                ToDoItem(
+                    etTitle.text.toString(),
+                    etDescription.text.toString(),
+                    false,
+                    etLocation.text.toString(),
+                    date
+                )
+            )
+            db.collection("Users").document(userId)
+                .set(ToDoItem(
+                    etTitle.text.toString(),
+                    etDescription.text.toString(),
+                    false,
+                    etLocation.text.toString(),
+                    date
+                ).getHashMapOf(), SetOptions.merge())
+            todoAdapter.notifyDataSetChanged()
+
+            etTitle.text.clear()
+            etDescription.text.clear()
+            etLocation.text.clear()
+            etTime.text.clear()
+
         }
     }
 
