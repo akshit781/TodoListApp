@@ -65,7 +65,7 @@
             tools:visibility="gone" />
 
         <LinearLayout
-            android:id="@+id/signOutAndDisconnect"
+            android:id="@+id/signOutAndContinue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -86,13 +86,13 @@
                 android:theme="@style/ThemeOverlay.MyDarkButton" />
 
             <Button
-                android:id="@+id/disconnectButton"
+                android:id="@+id/continueButton"
                 android:layout_marginStart="@dimen/button_horizontal_margin"
                 android:layout_marginEnd="@dimen/button_horizontal_margin"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/disconnect"
+                android:text="Continue"
                 android:theme="@style/ThemeOverlay.MyDarkButton" />
         </LinearLayout>
 

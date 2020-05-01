@@ -13,18 +13,11 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
-import com.example.todolistapp.R
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.activity_google.detail
-import kotlinx.android.synthetic.main.activity_google.disconnectButton
-import kotlinx.android.synthetic.main.activity_google.main_layout
-import kotlinx.android.synthetic.main.activity_google.signInButton
-import kotlinx.android.synthetic.main.activity_google.signOutAndDisconnect
-import kotlinx.android.synthetic.main.activity_google.signOutButton
-import kotlinx.android.synthetic.main.activity_google.status
+import kotlinx.android.synthetic.main.activity_google.*
 import java.util.*
 
 // Used https://github.com/firebase/quickstart-android/tree/master/auth as resource
@@ -45,7 +38,7 @@ class GoogleSignInActivity : MainActivity(), View.OnClickListener {
         // Button listeners
         signInButton.setOnClickListener(this)
         signOutButton.setOnClickListener(this)
-        disconnectButton.setOnClickListener(this)
+        continueButton.setOnClickListener(this)
 
         // [START config_signin]x
         // Configure Google Sign In
@@ -140,14 +133,8 @@ class GoogleSignInActivity : MainActivity(), View.OnClickListener {
         }
     }
 
-    private fun revokeAccess() {
-        // Firebase sign out
-        auth.signOut()
-
-        // Google revoke access
-        googleSignInClient.revokeAccess().addOnCompleteListener(this) {
-            updateUI(null)
-        }
+    private fun exitActivity() {
+        finish()
     }
 
     private fun updateUI(user: FirebaseUser?) {
@@ -164,7 +151,6 @@ class GoogleSignInActivity : MainActivity(), View.OnClickListener {
                     if (document != null) {
                         Log.d("TAG", "${document.id} => ${document.data}")
                         val keys = document.data?.keys
-                        var toDoList = ArrayList<ToDoItem>()
                         if (keys != null) {
                             for (key in keys) {
                                 val toDoItem = document.data!!.get(key) as? HashMap<String, Any?>
@@ -172,8 +158,8 @@ class GoogleSignInActivity : MainActivity(), View.OnClickListener {
                             }
                         }
                         Log.d("TAG", "${document.id} => $toDoList")
-                        userId = document.id;
-                        userData = document.data;
+                        userId = document.id
+                        userData = document.data as Map<String, Any>
                         val data = hashMapOf("capital" to hashMapOf(
                             "asd" to true,
                             "time" to Timestamp(Date(120, 4, 6))
@@ -188,13 +174,13 @@ class GoogleSignInActivity : MainActivity(), View.OnClickListener {
                     Log.w("TAG", "Error getting documents.", exception)
                 }
             signInButton.visibility = View.GONE
-            signOutAndDisconnect.visibility = View.VISIBLE
+            signOutAndContinue.visibility = View.VISIBLE
         } else {
             status.setText(R.string.signed_out)
             detail.text = null
 
             signInButton.visibility = View.VISIBLE
-            signOutAndDisconnect.visibility = View.GONE
+            signOutAndContinue.visibility = View.GONE
         }
     }
 
@@ -202,7 +188,7 @@ class GoogleSignInActivity : MainActivity(), View.OnClickListener {
         when (v.id) {
             R.id.signInButton -> signIn()
             R.id.signOutButton -> signOut()
-            R.id.disconnectButton -> revokeAccess()
+            R.id.continueButton -> exitActivity()
         }
     }
 
