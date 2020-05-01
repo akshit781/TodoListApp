@@ -2,7 +2,11 @@
 
 ### Authors: Adarsh Suresh and Akshit Deshpande
 
-This is a Kotlin-based project that emulates a regular To-Do List app. Each item will have a header and options to add a description, time and location. We use Firebase to store the To-Do list items and their details, so that users can login to the app on any device and view their To-Do list.
+For the final project of CS 199: Intro to Kotlin, we decided to make a todo list app with Firebase and Google Sign-In integration in order to simultaneously test our skills in Kotlin programming, Android development, and API usage. The first half of development consisted of setting up our APIs, with the end result being a working sign-in activity and secure Firebase connection. After that, we worked through the rest of the app while figuring out how to synchronize our Firestore database with our in-app data.
+
+We structured our Firestore database with each Google user's unique Firebase ID as a document ID within the 'Users' collection. Each document contains fields of Strings mapped to another map, or another set of fields. These lower-level fields are: 'title', 'description', 'location', 'time', and 'isCompleted'. All of these field values are Strings except for 'time' which is a Firebase Timestamp and 'isCompleted' which is a boolean. We edited our database rules so that a user can only access and modify the data of a document if that document's ID is his or her Firebase ID. A user who hasn't used our app before can also create a new document for themselves automatically in our database. The code to read, write, and create documents and the inner data was fairly simple and intuitive, as the Firebase Kotlin documentation was easy to follow. We created a ToDoItem class to model todo items in our database and created a constructor that was able to create a ToDoItem object from the received Firestore data, as well as a function that could convert an object's data into a HashMap to be directly added to the Firestore database.
+
+In the end, we found the development process to be challenging but enjoyable. During lectures we saw how Kotlin simplified many of the tedious and unnecessary features of Java, but it was only through the creation of this app where we truly saw the advantages that Kotlin provided. In the future, we hope to do much more Kotlin-based development.
 
 ---
 
