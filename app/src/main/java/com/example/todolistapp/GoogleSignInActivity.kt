@@ -14,6 +14,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.example.todolistapp.R
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_google.detail
@@ -23,6 +25,7 @@ import kotlinx.android.synthetic.main.activity_google.signInButton
 import kotlinx.android.synthetic.main.activity_google.signOutAndDisconnect
 import kotlinx.android.synthetic.main.activity_google.signOutButton
 import kotlinx.android.synthetic.main.activity_google.status
+import java.util.*
 
 // Used https://github.com/firebase/quickstart-android/tree/master/auth as resource
 class GoogleSignInActivity : MainActivity(), View.OnClickListener {
@@ -160,8 +163,25 @@ class GoogleSignInActivity : MainActivity(), View.OnClickListener {
                 .addOnSuccessListener { document ->
                     if (document != null) {
                         Log.d("TAG", "${document.id} => ${document.data}")
+                        val keys = document.data?.keys
+                        var toDoList = ArrayList<ToDoItem>()
+                        if (keys != null) {
+                            for (key in keys) {
+                                val toDoItem = document.data!!.get(key) as? HashMap<String, Any?>
+                                toDoList.add(ToDoItem(key, toDoItem))
+                            }
+                        }
+                        Log.d("TAG", "${document.id} => $toDoList")
                         userId = document.id;
                         userData = document.data;
+                        val data = hashMapOf("capital" to hashMapOf(
+                            "asd" to true,
+                            "time" to Timestamp(Date(120, 4, 6))
+
+                        ))
+
+                        db.collection("Users").document("DJ")
+                            .set(data, SetOptions.merge())
                     }
                 }
                 .addOnFailureListener { exception ->
