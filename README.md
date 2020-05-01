@@ -12,3 +12,5 @@ This is a Kotlin-based project that emulates a regular To-Do List app. Each item
 - Created a working Google sign in activity and UI which allows users to sign in and sign out
 - Added logic to the main activity to launch the sign in activity
 - Added logic to the main activity to retrieve user info from the database and store it into global variables
+- Updated security rules of Cloud Firestore to restrict user access to data associated with their user id
+- Added logic to the Google sign in activity to retrieve user-specific info from the database and store it into global variables
